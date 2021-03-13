@@ -76,6 +76,7 @@ ext {
             materialProgressBar: "me.zhanghai.android.materialprogressbar:library:${versions.materialProgressBarVersion}",
             material           : "com.google.android.material:material:${versions.materialVersion}",
             fragment           : "androidx.fragment:fragment:${versions.fragmentVersion}",
+            fragmentKtx           : "androidx.fragment:fragment-ktx:${versions.fragmentVersion}",
             activity           : "androidx.activity:activity-ktx:${versions.activityVersion}"
     ]
 

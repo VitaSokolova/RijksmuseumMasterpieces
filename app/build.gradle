@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 apply from: "$rootDir/config.gradle"
@@ -43,11 +44,19 @@ dependencies {
     implementation androidX.appcompat
     implementation androidX.constraintLayout
     implementation view.material
+    implementation view.fragment
+    implementation view.fragmentKtx
+    implementation view.activity
 
     // ViewModel
     implementation architectureComponents.viewModelKtx
     implementation architectureComponents.liveDataKtx
     implementation architectureComponents.viewModelSavedState
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation di.dagger
+    kapt di.daggerKapt
+    implementation di.javaInject
 
     testImplementation test.junit
     androidTestImplementation androidTest.extJunit

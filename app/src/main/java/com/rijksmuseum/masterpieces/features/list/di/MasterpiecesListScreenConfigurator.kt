@@ -1,5 +1,6 @@
 package com.rijksmuseum.masterpieces.features.list.di
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.rijksmuseum.masterpieces.app.App
@@ -7,12 +8,14 @@ import com.rijksmuseum.masterpieces.features.list.MasterpiecesListFragment
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListViewModel
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListViewModelImpl
 import com.rijksmuseum.masterpieces.infrastructure.di.app.AppComponent
-import com.rijksmuseum.masterpieces.infrastructure.di.screen.UniversalViewModelProviderFactory
 import com.rijksmuseum.masterpieces.infrastructure.di.screen.ScreenScope
+import com.rijksmuseum.masterpieces.infrastructure.di.screen.UniversalViewModelProviderFactory
 import com.rijksmuseum.masterpieces.infrastructure.di.screen.ViewModelStoreModule
+import com.rijksmuseum.masterpieces.utils.getCurrentLocale
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import java.util.*
 import javax.inject.Provider
 
 /**
@@ -37,11 +40,19 @@ class MasterpiecesListScreenConfigurator {
     internal class MasterpiecesListModule {
 
         @Provides
+        fun provideLocale(context: Context): Locale {
+            return context.getCurrentLocale()
+        }
+
+        @Provides
         fun provideViewModel(
             viewModelStore: ViewModelStore,
             provider: Provider<MasterpiecesListViewModelImpl>
         ): MasterpiecesListViewModel {
-            return ViewModelProvider(viewModelStore, UniversalViewModelProviderFactory(provider)).get(
+            return ViewModelProvider(
+                viewModelStore,
+                UniversalViewModelProviderFactory(provider)
+            ).get(
                 MasterpiecesListViewModelImpl::class.java
             )
         }

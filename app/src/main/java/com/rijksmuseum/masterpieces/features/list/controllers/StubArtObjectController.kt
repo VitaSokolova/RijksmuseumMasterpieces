@@ -22,15 +22,15 @@ class StubArtObjectController : BindableItemController<Boolean, StubArtObjectCon
         private val binding = ListItemArtObjectStubBinding.bind(itemView)
 
         override fun bind(isLoading: Boolean) {
-            with(binding) {
-                if (isLoading) {
-                    titleShimmer.startShimmer()
-                    iconShimmer.startShimmer()
-                } else {
-                    titleShimmer.stopShimmer()
-                    iconShimmer.stopShimmer()
-                }
-            }
+//            with(binding) {
+//                if (isLoading) {
+//                    titleShimmer.startShimmer()
+//                    iconShimmer.startShimmer()
+//                } else {
+//                    titleShimmer.stopShimmer()
+//                    iconShimmer.stopShimmer()
+//                }
+//            }
         }
     }
 

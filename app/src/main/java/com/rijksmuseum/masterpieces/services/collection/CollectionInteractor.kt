@@ -1,6 +1,5 @@
 package com.rijksmuseum.masterpieces.services.collection
 
-import android.content.Context
 import com.rijksmuseum.masterpieces.domain.ArtObject
 import io.reactivex.rxjava3.core.Single
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
@@ -19,6 +18,10 @@ class CollectionInteractor @Inject constructor(
 
     /**
      * Returns a specific page of works that are top pieces
+     *
+     * @param locale app locale
+     * @param pageNumber number of page ( if starting count from "1")
+     * @param pageSize count of elements in a page
      */
     fun getTopMasterpieces(
         locale: Locale,

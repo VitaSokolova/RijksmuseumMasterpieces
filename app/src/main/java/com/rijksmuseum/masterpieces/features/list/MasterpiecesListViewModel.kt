@@ -9,8 +9,10 @@ import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
 import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
 import com.rijksmuseum.masterpieces.services.collection.CollectionInteractor
+import com.rijksmuseum.masterpieces.utils.applyError
+import com.rijksmuseum.masterpieces.utils.applyLoading
+import com.rijksmuseum.masterpieces.utils.merge
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import ru.surfstudio.android.easyadapter.pagination.PaginationState
 import java.util.*
 import javax.inject.Inject
 
@@ -23,11 +25,13 @@ interface MasterpiecesListViewModel {
 
     val artObjects: LiveData<ArtObjects>
 
-    fun loadFirstPage(locale: Locale)
-    fun loadNextPage(locale: Locale)
+    fun loadFirstPage()
+
+    fun loadNextPage()
 }
 
 class MasterpiecesListViewModelImpl @Inject constructor(
+    private val locale: Locale,
     private val schedulersProvider: SchedulersProvider,
     private val collectionInteractor: CollectionInteractor
 ) : ViewModel(), MasterpiecesListViewModel {
@@ -36,20 +40,24 @@ class MasterpiecesListViewModelImpl @Inject constructor(
 
     private val disposables = CompositeDisposable()
 
+    init {
+        loadFirstPage()
+    }
+
     override fun onCleared() {
         disposables.clear()
     }
 
-    override fun loadFirstPage(locale: Locale) {
-        loadData(locale, 0, PAGE_SIZE)
+    override fun loadFirstPage() {
+        loadData(locale, FIRST_PAGE_INDEX, PAGE_SIZE)
     }
 
-    override fun loadNextPage(locale: Locale) {
+    override fun loadNextPage() {
         val previousDataList = artObjects.value?.data?.list
         loadData(
             locale,
-            previousDataList?.nextPage ?: 0,
-            previousDataList?.pageSize ?: 0
+            previousDataList?.nextPage ?: FIRST_PAGE_INDEX,
+            previousDataList?.pageSize ?: PAGE_SIZE
         )
     }
 
@@ -62,20 +70,28 @@ class MasterpiecesListViewModelImpl @Inject constructor(
             collectionInteractor.getTopMasterpieces(locale, pageNumber, pageSize)
                 .subscribeOn(schedulersProvider.worker())
                 .observeOn(schedulersProvider.main())
-                .doOnSubscribe { artObjects.value = RequestUi(load = MainLoading(true)) }
+                .doOnSubscribe {
+                    val previousPage = artObjects.value ?: RequestUi()
+                    // you can send another parameter, if swr loading is available too
+                    artObjects.value = previousPage.applyLoading(MainLoading(true))
+                }
                 .subscribe(
-                    {
-                        //todo: DataLists merging
-                        artObjects.value = RequestUi(PaginationBundle(it, PaginationState.COMPLETE))
+                    { newPageDataList ->
+                        val previousPage = artObjects.value?.data
+                        artObjects.value = RequestUi(
+                            previousPage.merge(newPageDataList)
+                        )
                     },
-                    {
-                        artObjects.value = RequestUi(error = it)
+                    { error ->
+                        val previousPage = artObjects.value ?: RequestUi()
+                        artObjects.value = previousPage.applyError(error)
                     }
                 )
         )
     }
 
     companion object {
+        private const val FIRST_PAGE_INDEX = 1
         private const val PAGE_SIZE = 10
     }
 }

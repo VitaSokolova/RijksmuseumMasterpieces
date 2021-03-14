@@ -1,6 +1,5 @@
 package com.rijksmuseum.masterpieces.infrastructure.network
 
-import com.rijksmuseum.masterpieces.domain.PaginationMetadata
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
 
 /**
@@ -15,17 +14,17 @@ fun <R, T : Transformable<R>> List<T>?.transformCollection(): List<R> {
  * @return [DataList]
  */
 fun <T> Collection<T>.toDataList(
-    paginationData: PaginationMetadata
+    pageNumber: Int = 0,
+    pageSize: Int = 0,
+    totalItemsCount: Int = 0
 ): DataList<T> {
-    with(paginationData) {
-        val totalPagesCount =
-            totalItemsCount / pageSize + (if (totalItemsCount % pageSize == 0) 0 else 1)
-        return DataList(
-            this@toDataList,
-            pageNumber,
-            pageSize,
-            totalItemsCount,
-            totalPagesCount
-        )
-    }
+    val totalPagesCount =
+        totalItemsCount / pageSize + (if (totalItemsCount % pageSize == 0) 0 else 1)
+    return DataList(
+        this@toDataList,
+        pageNumber,
+        pageSize,
+        totalItemsCount,
+        totalPagesCount
+    )
 }

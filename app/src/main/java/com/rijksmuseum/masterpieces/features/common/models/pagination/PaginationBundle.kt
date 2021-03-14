@@ -1,5 +1,6 @@
 package com.rijksmuseum.masterpieces.features.common.models.pagination
 
+import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
 import ru.surfstudio.android.easyadapter.pagination.PaginationState
 

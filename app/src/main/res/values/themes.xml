@@ -24,7 +24,7 @@
         <item name="shimmer_duration">1200</item>
         <item name="shimmer_colored">true</item>
         <item name="shimmer_highlight_color">@color/white</item>
-        <item name="shimmer_base_color">?attr/stubsColor</item>
+        <item name="shimmer_base_color">@color/gray</item>
         <item name="shimmer_highlight_alpha">0.4</item>
         <item name="shimmer_base_alpha">1.0</item>
     </style>

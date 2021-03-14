@@ -2,7 +2,6 @@ package com.rijksmuseum.masterpieces.services.collection
 
 import com.rijksmuseum.masterpieces.BuildConfig
 import com.rijksmuseum.masterpieces.domain.ArtObject
-import com.rijksmuseum.masterpieces.domain.PaginationMetadata
 import com.rijksmuseum.masterpieces.infrastructure.network.toDataList
 import com.rijksmuseum.masterpieces.services.collection.mappers.LanguageMapper
 import com.rijksmuseum.masterpieces.services.collection.mappers.LocalizedPaintingType
@@ -20,6 +19,10 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
 
     /**
      * Returns a specific page of works that are top pieces
+     *
+     * @param locale app locale
+     * @param pageNumber number of page ( if starting count from "1")
+     * @param pageSize count of elements in a page
      */
     fun getTopMasterpieces(
         locale: Locale,
@@ -31,15 +34,18 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
             language = localeServerConst,
             culture = localeServerConst,
             key = BuildConfig.API_KEY,
-            pageNumber = pageNumber,
+            pageNumber = pageNumber - 1, // in API indexes start from "0"
             pageSize = pageSize,
             sortType = SORT_TYPE,
             onlyTopPieces = true,
             onlyWithImages = true,
             type = LocalizedPaintingType(locale)
         ).map {
-            val metadata = PaginationMetadata(pageNumber, pageSize, it.totalItemsCount)
-            it.transform().toDataList(metadata)
+            it.transform().toDataList(
+                pageNumber = pageNumber,
+                pageSize = pageSize,
+                totalItemsCount = it.totalItemsCount
+            )
         }
     }
 

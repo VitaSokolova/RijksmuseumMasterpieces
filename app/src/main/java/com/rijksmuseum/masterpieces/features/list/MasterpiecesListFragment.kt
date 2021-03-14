@@ -6,16 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpiecesListBinding
 import com.rijksmuseum.masterpieces.features.list.controllers.ArtObjectController
 import com.rijksmuseum.masterpieces.features.list.controllers.ErrorPlaceholderController
+import com.rijksmuseum.masterpieces.features.list.controllers.PaginationFooterItemController
 import com.rijksmuseum.masterpieces.features.list.controllers.StubArtObjectController
 import com.rijksmuseum.masterpieces.features.list.di.MasterpiecesListScreenConfigurator
-import com.rijksmuseum.masterpieces.utils.getCurrentLocale
-import ru.surfstudio.android.easyadapter.EasyAdapter
 import ru.surfstudio.android.easyadapter.ItemList
+import ru.surfstudio.android.easyadapter.pagination.EasyPaginationAdapter
+import ru.surfstudio.android.easyadapter.pagination.PaginationState
 import javax.inject.Inject
 
 /**
@@ -28,14 +30,18 @@ class MasterpiecesListFragment : Fragment() {
 
     private val viewBinding by viewBinding(FragmentMasterpiecesListBinding::bind)
 
-    private val easyAdapter = EasyAdapter()
+    private val easyAdapter = EasyPaginationAdapter(
+        PaginationFooterItemController()
+    ) {
+        viewModel.loadNextPage()
+    }
 
     private val stubController = StubArtObjectController()
     private val errorController = ErrorPlaceholderController {
-        viewModel.loadFirstPage(context.getCurrentLocale())
+        viewModel.loadFirstPage()
     }
     private val artObjectController = ArtObjectController {
-        //todo: navigate to detail screen
+        //todo: navigate to details screen
     }
 
     override fun onCreateView(
@@ -49,11 +55,11 @@ class MasterpiecesListFragment : Fragment() {
         MasterpiecesListScreenConfigurator().inject(this)
         initViews()
         observeViewModel()
-        viewModel.loadFirstPage(context.getCurrentLocale())
     }
 
     private fun initViews() {
         with(viewBinding) {
+            recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = easyAdapter
         }
     }
@@ -67,7 +73,8 @@ class MasterpiecesListFragment : Fragment() {
                         data.isLoading -> repeat(STUBS_COUNT) { add(true, stubController) }
                         data.hasError -> add(errorController)
                     }
-                }
+                },
+                data.data?.state ?: PaginationState.COMPLETE
             )
         })
     }

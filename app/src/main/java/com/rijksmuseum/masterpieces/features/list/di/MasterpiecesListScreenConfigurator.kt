@@ -63,7 +63,7 @@ class MasterpiecesListScreenConfigurator {
 
         DaggerMasterpiecesListScreenConfigurator_MasterpiecesListComponent.builder()
             .appComponent((activity?.application as App).appComponent)
-            .viewModelStoreModule(ViewModelStoreModule(fragment.viewModelStore))
+            .viewModelStoreModule(ViewModelStoreModule(activity.viewModelStore))
             .masterpiecesListModule(MasterpiecesListModule())
             .build()
             .inject(fragment)

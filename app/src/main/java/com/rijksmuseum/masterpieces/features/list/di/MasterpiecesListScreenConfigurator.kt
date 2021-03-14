@@ -3,7 +3,6 @@ package com.rijksmuseum.masterpieces.features.list.di
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.rijksmuseum.masterpieces.app.App
-import com.rijksmuseum.masterpieces.features.list.DaggerMasterpiecesListScreenConfigurator_MasterpiecesListComponent
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListFragment
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListViewModel
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListViewModelImpl

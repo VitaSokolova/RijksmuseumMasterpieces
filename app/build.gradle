@@ -52,11 +52,17 @@ dependencies {
     implementation architectureComponents.viewModelKtx
     implementation architectureComponents.liveDataKtx
     implementation architectureComponents.viewModelSavedState
-//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation di.dagger
     kapt di.daggerKapt
     implementation di.javaInject
+
+    implementation network.retrofitCore
+    implementation network.retrofitConverterGson
+    implementation network.retrofitRxJava3Adapter
+    implementation network.okHttpLoggingInterceptor
+    implementation network.rxJava3
+    implementation network.rxAndroid3
 
     testImplementation test.junit
     androidTestImplementation androidTest.extJunit

@@ -7,5 +7,6 @@ import android.content.Context
  * Should be used in subcomponents, which dependent on [AppComponent].
  */
 interface AppProxyDependencies {
+
     fun context(): Context
 }

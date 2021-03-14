@@ -17,6 +17,11 @@ android {
         versionCode app.versionCode
         versionName app.versionName
 
+        def apiKeyPropertiesFile = rootProject.file("apikey.properties")
+        def apiKeyProperties = new Properties()
+        apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+        buildConfigField("String", "API_KEY", apiKeyProperties['API_KEY'])
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -48,15 +53,20 @@ dependencies {
     implementation view.fragmentKtx
     implementation view.activity
 
+    // Paging
+    implementation paging.dataList
+
     // ViewModel
     implementation architectureComponents.viewModelKtx
     implementation architectureComponents.liveDataKtx
     implementation architectureComponents.viewModelSavedState
 
+    // DI
     implementation di.dagger
     kapt di.daggerKapt
     implementation di.javaInject
 
+    // Network
     implementation network.retrofitCore
     implementation network.retrofitConverterGson
     implementation network.retrofitRxJava3Adapter
@@ -64,6 +74,7 @@ dependencies {
     implementation network.rxJava3
     implementation network.rxAndroid3
 
+    // Tests
     testImplementation test.junit
     androidTestImplementation androidTest.extJunit
     androidTestImplementation androidTest.espressoCore

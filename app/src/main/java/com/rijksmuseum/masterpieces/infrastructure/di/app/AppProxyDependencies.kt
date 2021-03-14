@@ -1,6 +1,7 @@
 package com.rijksmuseum.masterpieces.infrastructure.di.app
 
 import android.content.Context
+import com.rijksmuseum.masterpieces.services.collection.CollectionInteractor
 
 /**
  * An interface which contains all available dependencies in the scope PerApplication
@@ -9,4 +10,6 @@ import android.content.Context
 interface AppProxyDependencies {
 
     fun context(): Context
+
+    fun collectionInteractor(): CollectionInteractor
 }

@@ -1,14 +1,13 @@
 package com.rijksmuseum.masterpieces.features.list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.features.list.di.MasterpiecesListScreenConfigurator
 import javax.inject.Inject
-
 
 /**
  * Fragment, which shows the list of masterpieces
@@ -20,8 +19,7 @@ class MasterpiecesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MasterpiecesListScreenConfigurator()
-            .inject(this)
+        MasterpiecesListScreenConfigurator().inject(this)
     }
 
     override fun onCreateView(
@@ -40,9 +38,7 @@ class MasterpiecesListFragment : Fragment() {
          * @return A new instance of fragment MasterpiecesListFragment.
          */
         @JvmStatic
-        fun newInstance() = MasterpiecesListFragment().apply {
-                arguments = Bundle()
-            }
+        fun newInstance() = MasterpiecesListFragment()
 
         const val NAME = "MasterpiecesListFragment"
     }

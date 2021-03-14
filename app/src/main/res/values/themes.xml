@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <attr name="stubsColor" format="color|reference" />
+
     <!-- Base application theme. -->
-    <style name="Theme.RijksmuseumMasterpieces" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,5 +15,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="stubsColor">@color/gray</item>
+    </style>
+
+    <!-- Стиль шиммера для анимации загрузки -->
+    <style name="AppShimmer">
+        <item name="shimmer_duration">1200</item>
+        <item name="shimmer_colored">true</item>
+        <item name="shimmer_highlight_color">@color/white</item>
+        <item name="shimmer_base_color">?attr/stubsColor</item>
+        <item name="shimmer_highlight_alpha">0.4</item>
+        <item name="shimmer_base_alpha">1.0</item>
     </style>
 </resources>

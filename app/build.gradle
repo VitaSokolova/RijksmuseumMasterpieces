@@ -38,6 +38,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -52,6 +56,15 @@ dependencies {
     implementation view.fragment
     implementation view.fragmentKtx
     implementation view.activity
+    implementation view.viewBindingPropertyDelegate
+    implementation view.shimmer
+
+    implementation images.glide
+    annotationProcessor images.glideAnnotationProcessor
+
+    // RecyclerView Adapter
+    implementation view.easyAdapter
+    implementation view.easyAdapterPaging
 
     // Paging
     implementation paging.dataList
@@ -60,6 +73,8 @@ dependencies {
     implementation architectureComponents.viewModelKtx
     implementation architectureComponents.liveDataKtx
     implementation architectureComponents.viewModelSavedState
+    implementation architectureComponents.lifecycle
+    implementation architectureComponents.lifecycleAnnotationProcessor
 
     // DI
     implementation di.dagger

@@ -2,4 +2,6 @@
     <string name="app_name">RijksmuseumMasterpieces</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="masterpieces_list_error_placeholder_text">Oops, an error occurred</string>
+    <string name="masterpieces_list_retry_btn">Retry</string>
 </resources>

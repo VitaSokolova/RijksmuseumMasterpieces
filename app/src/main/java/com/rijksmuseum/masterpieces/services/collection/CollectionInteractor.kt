@@ -1,5 +1,6 @@
 package com.rijksmuseum.masterpieces.services.collection
 
+import android.content.Context
 import com.rijksmuseum.masterpieces.domain.ArtObject
 import io.reactivex.rxjava3.core.Single
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
@@ -12,7 +13,9 @@ import javax.inject.Singleton
  * ("Use Case" in Clean architecture terminology)
  */
 @Singleton
-class CollectionInteractor @Inject constructor(private val collectionRepository: CollectionRepository) {
+class CollectionInteractor @Inject constructor(
+    private val collectionRepository: CollectionRepository
+) {
 
     /**
      * Returns a specific page of works that are top pieces

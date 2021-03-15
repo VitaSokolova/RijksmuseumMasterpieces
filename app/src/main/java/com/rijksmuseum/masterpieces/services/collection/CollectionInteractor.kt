@@ -1,6 +1,7 @@
 package com.rijksmuseum.masterpieces.services.collection
 
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
+import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import io.reactivex.rxjava3.core.Single
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
 import java.util.*
@@ -27,7 +28,11 @@ class CollectionInteractor @Inject constructor(
         locale: Locale,
         pageNumber: Int,
         pageSize: Int
-    ): Single<DataList<ArtObject>> {
+    ): Single<DataList<ArtObjectBasics>> {
         return collectionRepository.getTopMasterpieces(locale, pageNumber, pageSize)
+    }
+
+    fun getMasterpieceDetails(id: String, locale: Locale): Single<ArtObjectDetailed> {
+        return collectionRepository.getMasterpieceDetails(id, locale)
     }
 }

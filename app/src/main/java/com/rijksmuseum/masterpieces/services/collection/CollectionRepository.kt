@@ -1,7 +1,8 @@
 package com.rijksmuseum.masterpieces.services.collection
 
 import com.rijksmuseum.masterpieces.BuildConfig
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
+import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.infrastructure.network.toDataList
 import com.rijksmuseum.masterpieces.services.collection.mappers.LanguageMapper
 import com.rijksmuseum.masterpieces.services.collection.mappers.LocalizedPaintingType
@@ -32,13 +33,13 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
         locale: Locale,
         pageNumber: Int,
         pageSize: Int
-    ): Single<DataList<ArtObject>> {
+    ): Single<DataList<ArtObjectBasics>> {
         val localeServerConst = LanguageMapper(locale)
         return collectionApi.getTopMasterpieces(
             language = localeServerConst,
             culture = localeServerConst,
             key = BuildConfig.API_KEY,
-            pageNumber = pageNumber ,
+            pageNumber = pageNumber,
             pageSize = pageSize,
             sortType = SORT_TYPE,
             onlyTopPieces = true,
@@ -51,6 +52,16 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
                 totalItemsCount = it.totalItemsCount
             )
         }
+    }
+
+    fun getMasterpieceDetails(id: String, locale: Locale): Single<ArtObjectDetailed> {
+        val localeServerConst = LanguageMapper(locale)
+        return collectionApi.getMasterpieceDetails(
+            language = localeServerConst,
+            id = id,
+            culture = localeServerConst,
+            key = BuildConfig.API_KEY
+        ).map { it.transform() }
     }
 
     companion object {

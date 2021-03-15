@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".features.details.MasterpieceDetailsFragment">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@drawable/ic_arrow_back" />
-
-    <ImageView
-        android:id="@+id/paintingIv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_height="120dp"
-        tools:src="@drawable/ic_painting" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,13 +12,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/paintingIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:minHeight="256dp"
+                tools:src="@drawable/ic_painting_placeholder" />
 
             <TextView
                 android:id="@+id/titleTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Officers and other civic guardsmen of District II in Amsterdam, under the command of Captain Frans Banninck Cocq and Lieutenant Willem van Ruytenburch, known as ‘The Night Watch’" />
 
@@ -41,6 +34,7 @@
                 android:id="@+id/principalMakerTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="8dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 tools:text="Principal maker: Rembrandt van Rijn" />
@@ -49,6 +43,7 @@
                 android:id="@+id/datingTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 tools:text="Dating: 1642" />
 
@@ -56,11 +51,25 @@
                 android:id="@+id/descriptionTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 tools:text="Officieren en andere schutters van wijk II in Amsterdam onder leiding van kapitein Frans Banninck Cocq en luitenant Willem van Ruytenburch, sinds het einde van de 18de eeuw bekend als ‘De Nachtwacht’. Schutters van de Kloveniersdoelen uit een poort naar buiten tredend. Op een schild aangebracht naast de poort staan de namen van de afgebeelde personen: Frans Banning Cocq, heer van purmerlant en Ilpendam, Capiteijn Willem van Ruijtenburch van Vlaerdingen, heer van Vlaerdingen, Lu[ij]tenant, Jan Visscher Cornelisen Vaendrich, Rombout Kemp Sergeant, Reijnier Engelen Sergeant, Barent Harmansen, Jan Adriaensen Keyser, Elbert Willemsen, Jan Clasen Leydeckers, Jan Ockersen, Jan Pietersen bronchorst, Harman Iacobsen wormskerck, Jacob Dircksen de Roy, Jan vander heede, Walich Schellingwou, Jan brugman, Claes van Cruysbergen, Paulus Schoonhoven. De schutters zijn gewapend met onder anderen pieken, musketten en hellebaarden. Rechts de tamboer met een grote trommel. Tussen de soldaten links staat een meisje met een dode kip om haar middel, rechts een blaffende hond. Linksboven de vaandrig met de uitgestoken vaandel." />
 
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/backIb"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:foreground="?selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:src="@drawable/ic_arrow_back"
+        android:tint="?attr/colorOnSurface"
+        tools:ignore="ContentDescription" />
+
+</FrameLayout>

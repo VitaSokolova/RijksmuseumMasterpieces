@@ -1,7 +1,7 @@
 package com.rijksmuseum.masterpieces.services.collection.dto
 
 import com.google.gson.annotations.SerializedName
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.infrastructure.network.Transformable
 import com.rijksmuseum.masterpieces.infrastructure.network.transformCollection
 
@@ -13,7 +13,7 @@ data class CollectionResponse(
     val totalItemsCount: Int,
     @SerializedName("artObjects")
     val artObjects: List<ArtObjectDto>
-) : Transformable<List<ArtObject>> {
+) : Transformable<List<ArtObjectBasics>> {
 
-    override fun transform(): List<ArtObject> = artObjects.transformCollection()
+    override fun transform(): List<ArtObjectBasics> = artObjects.transformCollection()
 }

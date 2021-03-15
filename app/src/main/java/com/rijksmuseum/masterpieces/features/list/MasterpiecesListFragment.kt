@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpiecesListBinding
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
 import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragment
 import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragmentRoute
@@ -75,8 +75,8 @@ class MasterpiecesListFragment : Fragment() {
         )
     }
 
-    private fun renderArtObjects(paginationBundle: PaginationBundle<ArtObject>) {
-        val items = paginationBundle.list ?: emptyList<ArtObject>()
+    private fun renderArtObjects(paginationBundle: PaginationBundle<ArtObjectBasics>) {
+        val items = paginationBundle.list ?: emptyList<ArtObjectBasics>()
         easyAdapter.setItems(
             ItemList.create().apply {
                 items.forEachIndexed { index, artObject ->
@@ -116,7 +116,7 @@ class MasterpiecesListFragment : Fragment() {
         )
     }
 
-    private fun openDetailsScreen(artObject: ArtObject) {
+    private fun openDetailsScreen(artObject: ArtObjectBasics) {
         activity?.supportFragmentManager?.commit {
             replace<MasterpieceDetailsFragment>(
                 R.id.fragment_container,

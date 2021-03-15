@@ -4,14 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.bumptech.glide.Glide
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpieceDetailsBinding
+import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.features.details.di.MasterpieceDetailsScreenConfigurator
-import com.rijksmuseum.masterpieces.utils.setDefaultIconTint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
+/**
+ * Fragment, which shows  masterpiece's detailed info
+ */
 class MasterpieceDetailsFragment : Fragment() {
 
     @Inject
@@ -31,15 +39,63 @@ class MasterpieceDetailsFragment : Fragment() {
         MasterpieceDetailsScreenConfigurator().inject(this)
         initViews()
         initListeners()
+        observeViewModel()
     }
 
     private fun initViews() {
-        viewBinding.toolbar.setDefaultIconTint()
+        viewBinding.backIb.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.background_arrow_ic).apply {
+                this?.alpha = (255 * 0.2).roundToInt()
+            }
     }
 
     private fun initListeners() {
-        viewBinding.toolbar.setNavigationOnClickListener {
+        viewBinding.backIb.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.screenState.observe(
+            viewLifecycleOwner,
+            Observer { data ->
+                with(viewBinding) {
+                    Glide
+                        .with(requireContext())
+                        .load(data.basics.imageUri)
+                        .placeholder(R.drawable.ic_painting_placeholder)
+                        .into(paintingIv)
+
+                    when {
+                        data.details.data != null -> {
+                            renderArtObjectDetails(data.details.data)
+                        }
+                        data.details.isLoading -> {
+                            //todo: render load state
+                        }
+                        data.details.hasError -> {
+                            //todo: render error state
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    private fun renderArtObjectDetails(data: ArtObjectDetailed) {
+        with(viewBinding) {
+            titleTv.text = data.title
+
+            principalMakerTv.text = resources.getString(
+                R.string.masterpiece_details_author_text,
+                data.principalOrFirstMaker
+            )
+
+            datingTv.isVisible = data.dating.isNotEmpty()
+            datingTv.text =
+                resources.getString(R.string.masterpiece_details_dating_text, data.dating)
+
+            descriptionTV.text = data.description
         }
     }
 

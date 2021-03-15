@@ -20,6 +20,11 @@ import dagger.Provides
 import java.util.*
 import javax.inject.Provider
 
+
+/**
+ * Class with screen component and module,
+ * responsible for building dependencies for [MasterpieceDetailsFragment] screen
+ */
 class MasterpieceDetailsScreenConfigurator {
 
     @ScreenScope

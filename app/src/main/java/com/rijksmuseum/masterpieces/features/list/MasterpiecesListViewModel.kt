@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
 import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.*
 import javax.inject.Inject
 
-typealias LoadableArtObjects = RequestUi<PaginationBundle<ArtObject>>
+typealias LoadableArtObjects = RequestUi<PaginationBundle<ArtObjectBasics>>
 
 /**
  * Interface for [MasterpiecesListFragment] ViewModel

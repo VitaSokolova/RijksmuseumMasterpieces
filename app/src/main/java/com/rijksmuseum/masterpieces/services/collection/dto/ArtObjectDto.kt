@@ -1,7 +1,7 @@
 package com.rijksmuseum.masterpieces.services.collection.dto
 
 import com.google.gson.annotations.SerializedName
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.infrastructure.network.Transformable
 
 data class ArtObjectDto(
@@ -13,9 +13,9 @@ data class ArtObjectDto(
     private val principalOrFirstMaker: String,
     @SerializedName("webImage")
     private val image: ImageDto
-) : Transformable<ArtObject> {
+) : Transformable<ArtObjectBasics> {
 
-    override fun transform(): ArtObject {
-        return ArtObject(objectNumber, title, principalOrFirstMaker, image.url)
+    override fun transform(): ArtObjectBasics {
+        return ArtObjectBasics(objectNumber, title, principalOrFirstMaker, image.url)
     }
 }

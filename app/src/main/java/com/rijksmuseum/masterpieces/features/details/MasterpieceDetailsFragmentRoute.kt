@@ -1,15 +1,15 @@
 package com.rijksmuseum.masterpieces.features.details
 
 import android.os.Bundle
-import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 
 /**
  * Encapsulates working with input parameters on [MasterpieceDetailsFragment]
  */
-class MasterpieceDetailsFragmentRoute(val artObject: ArtObject) {
+class MasterpieceDetailsFragmentRoute(val artObject: ArtObjectBasics) {
 
     constructor(bundle: Bundle) : this(
-        bundle.getParcelable<ArtObject>(EXTRA_ART_OBJECT)
+        bundle.getParcelable<ArtObjectBasics>(EXTRA_ART_OBJECT)
             ?: error("Required input parameter ArtObject wasn't passed")
     )
 

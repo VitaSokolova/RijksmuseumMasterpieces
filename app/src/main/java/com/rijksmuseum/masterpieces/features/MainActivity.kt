@@ -11,12 +11,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        openMasterpiecesListFragment()
+
+        val fragment = supportFragmentManager.findFragmentByTag(MasterpiecesListFragment.NAME)
+        if (fragment == null) {
+            openMasterpiecesListFragment()
+        }
     }
 
     private fun openMasterpiecesListFragment() {
         supportFragmentManager.commit {
-            replace<MasterpiecesListFragment>(R.id.fragment_container)
+            replace<MasterpiecesListFragment>(
+                R.id.fragment_container,
+                MasterpiecesListFragment.NAME
+            )
             addToBackStack(MasterpiecesListFragment.NAME)
         }
     }

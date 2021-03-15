@@ -66,11 +66,11 @@ class MasterpiecesListFragment : Fragment() {
 
 
     private fun observeViewModel() {
-        viewModel.artObjects.observe(viewLifecycleOwner, Observer { data ->
+        viewModel.artObjects.observe(viewLifecycleOwner, Observer { requestUi ->
             when {
-                data.hasData -> renderArtObjects(data?.data ?: PaginationBundle())
-                data.isLoading -> renderLoading()
-                data.hasError -> renderErrorPlaceholder()
+                requestUi.data != null -> renderArtObjects(requestUi?.data)
+                requestUi.isLoading -> renderLoading()
+                requestUi.hasError -> renderErrorPlaceholder()
             }
         }
         )

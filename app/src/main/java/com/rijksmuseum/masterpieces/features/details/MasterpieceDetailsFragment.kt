@@ -8,11 +8,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpieceDetailsBinding
 import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
+import com.rijksmuseum.masterpieces.features.common.debounce
 import com.rijksmuseum.masterpieces.features.details.di.MasterpieceDetailsScreenConfigurator
 import com.rijksmuseum.masterpieces.features.details.models.DetailsScreenState
 import javax.inject.Inject
@@ -62,24 +65,27 @@ class MasterpieceDetailsFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.screenState.observe(
-            viewLifecycleOwner,
-            Observer { data ->
-                renderBasicInfo(data)
-                viewBinding.placeholder.placeholderContainer.isVisible = data.details.hasError
-                viewBinding.datingTv.isVisible = data.details.hasData
-                viewBinding.descriptionTV.isVisible = data.details.hasData
-                when {
-                    data.details.data != null -> renderArtObjectDetails(data.details.data)
-                    data.details.isLoading -> {
-                        //todo: render load state
-                    }
-                    data.details.hasError -> {
-                        //todo: render error state
+        viewModel.screenState
+            .debounce(
+                STATE_CHANGES_DEBOUNCE,
+                viewLifecycleOwner.lifecycleScope
+            ) // to avoid loader and placeholder blinking
+            .observe(
+                viewLifecycleOwner,
+                Observer { data ->
+                    with(viewBinding) {
+                        loader.isVisible = data.details.isLoading
+                        placeholder.placeholderContainer.isVisible = data.details.hasError
+                        datingTv.isVisible = data.details.hasData
+                        descriptionTV.isVisible = data.details.hasData
+                        renderBasicInfo(data)
+                        when {
+                            data.details.hasError -> showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text))
+                            data.details.data != null -> renderArtObjectDetails(data.details.data)
+                        }
                     }
                 }
-            }
-        )
+            )
     }
 
     private fun renderBasicInfo(data: DetailsScreenState) {
@@ -109,7 +115,13 @@ class MasterpieceDetailsFragment : Fragment() {
         }
     }
 
+    private fun showSnack(text: String) {
+        Snackbar.make(viewBinding.root, text, Snackbar.LENGTH_SHORT).show()
+    }
+
     companion object {
         const val NAME = "MasterpieceDetailsFragment"
+
+        private const val STATE_CHANGES_DEBOUNCE = 250L
     }
 }

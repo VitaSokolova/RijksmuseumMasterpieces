@@ -8,11 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpiecesListBinding
 import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
+import com.rijksmuseum.masterpieces.features.common.debounce
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
 import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragment
 import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragmentRoute
@@ -63,16 +67,24 @@ class MasterpiecesListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.artObjects.observe(
-            viewLifecycleOwner,
-            Observer { requestUi ->
-                when {
-                    requestUi.data != null -> renderArtObjects(requestUi?.data)
-                    requestUi.isLoading -> renderLoading()
-                    requestUi.hasError -> renderErrorPlaceholder()
+        viewModel.artObjects
+            .debounce(
+                STATE_CHANGES_DEBOUNCE,
+                viewLifecycleOwner.lifecycleScope
+            ) // to avoid loader and placeholder blinking
+            .observe(
+                viewLifecycleOwner,
+                Observer { requestUi ->
+                    when {
+                        requestUi.data != null -> renderArtObjects(requestUi?.data)
+                        requestUi.isLoading -> renderLoading()
+                        requestUi.hasError -> {
+                            renderErrorPlaceholder()
+                            showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text))
+                        }
+                    }
                 }
-            }
-        )
+            )
     }
 
     private fun renderArtObjects(paginationBundle: PaginationBundle<ArtObjectBasics>) {
@@ -128,8 +140,13 @@ class MasterpiecesListFragment : Fragment() {
         }
     }
 
+    private fun showSnack(text: String) {
+        Snackbar.make(viewBinding.root, text, Snackbar.LENGTH_SHORT).show()
+    }
+
     companion object {
         const val NAME = "MasterpiecesListFragment"
         private const val STUBS_COUNT = 3
+        private const val STATE_CHANGES_DEBOUNCE = 250L
     }
 }

@@ -3,18 +3,18 @@ package com.rijksmuseum.masterpieces.features.common.models.loading
 /**
  * Wrapper to display loading status on Ui.
  */
-interface Loading {
-    val isLoading: Boolean
+enum class Loading {
+    /**
+     * Loading state when there is no content on the screen yet
+     */
+    MAIN,
+
+    /**
+     * Loading state which invoked via pagination
+     */
+    PAGING;
+
+    fun isMain(): Boolean = this == MAIN
+    fun isPaging(): Boolean = this == PAGING
 }
 
-/**
- * Loading state when there is no content on the screen yet
- */
-class MainLoading(override val isLoading: Boolean) :
-    Loading
-
-/**
- * Loading state which invoked via SwipeRefresh
- */
-class SwipeRefreshLoading(override val isLoading: Boolean) :
-    Loading

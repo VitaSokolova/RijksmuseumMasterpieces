@@ -21,7 +21,11 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
      * Returns a specific page of works that are top pieces
      *
      * @param locale app locale
-     * @param pageNumber number of page ( if starting count from "1")
+     *
+     * @param pageNumber number of page ( if starting count from "1").
+     * Experimentally it turned out that the API sends the same 0 and 1st pages and,
+     * contrary to the documentation, starts from 1
+     *
      * @param pageSize count of elements in a page
      */
     fun getTopMasterpieces(
@@ -34,7 +38,7 @@ class CollectionRepository @Inject constructor(private val collectionApi: Collec
             language = localeServerConst,
             culture = localeServerConst,
             key = BuildConfig.API_KEY,
-            pageNumber = pageNumber - 1, // in API indexes start from "0"
+            pageNumber = pageNumber ,
             pageSize = pageSize,
             sortType = SORT_TYPE,
             onlyTopPieces = true,

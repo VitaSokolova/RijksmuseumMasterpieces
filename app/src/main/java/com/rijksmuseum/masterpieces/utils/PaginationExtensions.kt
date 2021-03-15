@@ -27,9 +27,9 @@ fun <T> PaginationBundle<T>?.merge(nextPage: DataList<T>): PaginationBundle<T> {
  */
 fun <T> RequestUi<PaginationBundle<T>>.applyError(error: Throwable): RequestUi<PaginationBundle<T>> {
     return if (data?.hasData == true) {
-        copy(data = data.copy(state = PaginationState.ERROR))
+        copy(data = data.copy(state = PaginationState.ERROR), load = null)
     } else {
-        RequestUi(error = error)
+        RequestUi(error = error, load = null)
     }
 }
 
@@ -39,10 +39,10 @@ fun <T> RequestUi<PaginationBundle<T>>.applyError(error: Throwable): RequestUi<P
  * If it is only a pagination loading, we don't change anything
  * If it is the first page loading, we set a global loading state
  */
-fun <T> RequestUi<PaginationBundle<T>>.applyLoading(loading: Loading): RequestUi<PaginationBundle<T>> {
+fun <T> RequestUi<PaginationBundle<T>>.applyLoading(): RequestUi<PaginationBundle<T>> {
     return if (data?.hasData == true) {
-        this
+        copy(load = Loading.PAGING, error = null)
     } else {
-        RequestUi(load = loading)
+        RequestUi(load = Loading.MAIN, error = null)
     }
 }

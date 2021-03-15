@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rijksmuseum.masterpieces.domain.ArtObject
-import com.rijksmuseum.masterpieces.features.common.models.loading.MainLoading
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
 import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
@@ -16,14 +15,14 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.*
 import javax.inject.Inject
 
-typealias ArtObjects = RequestUi<PaginationBundle<ArtObject>>
+typealias LoadableArtObjects = RequestUi<PaginationBundle<ArtObject>>
 
 /**
  * Interface for [MasterpiecesListFragment] ViewModel
  */
 interface MasterpiecesListViewModel {
 
-    val artObjects: LiveData<ArtObjects>
+    val artObjects: LiveData<LoadableArtObjects>
 
     fun loadFirstPage()
 
@@ -36,7 +35,7 @@ class MasterpiecesListViewModelImpl @Inject constructor(
     private val collectionInteractor: CollectionInteractor
 ) : ViewModel(), MasterpiecesListViewModel {
 
-    override val artObjects = MutableLiveData<ArtObjects>()
+    override val artObjects = MutableLiveData<LoadableArtObjects>()
 
     private val disposables = CompositeDisposable()
 
@@ -53,12 +52,14 @@ class MasterpiecesListViewModelImpl @Inject constructor(
     }
 
     override fun loadNextPage() {
-        val previousDataList = artObjects.value?.data?.list
-        loadData(
-            locale,
-            previousDataList?.nextPage ?: FIRST_PAGE_INDEX,
-            previousDataList?.pageSize ?: PAGE_SIZE
-        )
+        if (artObjects.value?.isLoadingNewPage == false) {
+            val previousPage = artObjects.value?.data?.list
+            loadData(
+                locale,
+                previousPage?.nextPage ?: FIRST_PAGE_INDEX,
+                previousPage?.pageSize ?: PAGE_SIZE
+            )
+        }
     }
 
     private fun loadData(
@@ -72,15 +73,13 @@ class MasterpiecesListViewModelImpl @Inject constructor(
                 .observeOn(schedulersProvider.main())
                 .doOnSubscribe {
                     val previousPage = artObjects.value ?: RequestUi()
-                    // you can send another parameter, if swr loading is available too
-                    artObjects.value = previousPage.applyLoading(MainLoading(true))
+                    artObjects.value = previousPage.applyLoading()
                 }
                 .subscribe(
-                    { newPageDataList ->
+                    { newPage ->
                         val previousPage = artObjects.value?.data
-                        artObjects.value = RequestUi(
-                            previousPage.merge(newPageDataList)
-                        )
+                        val mergedData = previousPage.merge(newPage)
+                        artObjects.value = RequestUi(mergedData)
                     },
                     { error ->
                         val previousPage = artObjects.value ?: RequestUi()

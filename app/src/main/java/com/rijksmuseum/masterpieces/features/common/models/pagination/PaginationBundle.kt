@@ -9,7 +9,7 @@ import ru.surfstudio.android.easyadapter.pagination.PaginationState
  */
 data class PaginationBundle<T>(
     val list: DataList<T>? = null,
-    val state: PaginationState? = null
+    val state: PaginationState = PaginationState.COMPLETE
 ) {
 
     val hasData = !list.isNullOrEmpty()

@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpiecesListBinding
-import com.rijksmuseum.masterpieces.features.list.controllers.ArtObjectController
-import com.rijksmuseum.masterpieces.features.list.controllers.ErrorPlaceholderController
-import com.rijksmuseum.masterpieces.features.list.controllers.PaginationFooterItemController
-import com.rijksmuseum.masterpieces.features.list.controllers.StubArtObjectController
+import com.rijksmuseum.masterpieces.domain.ArtObject
+import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
+import com.rijksmuseum.masterpieces.features.list.controllers.*
 import com.rijksmuseum.masterpieces.features.list.di.MasterpiecesListScreenConfigurator
 import ru.surfstudio.android.easyadapter.ItemList
 import ru.surfstudio.android.easyadapter.pagination.EasyPaginationAdapter
@@ -36,6 +35,7 @@ class MasterpiecesListFragment : Fragment() {
         viewModel.loadNextPage()
     }
 
+    private val headerController = HeaderItemController()
     private val stubController = StubArtObjectController()
     private val errorController = ErrorPlaceholderController {
         viewModel.loadFirstPage()
@@ -64,19 +64,61 @@ class MasterpiecesListFragment : Fragment() {
         }
     }
 
+
     private fun observeViewModel() {
         viewModel.artObjects.observe(viewLifecycleOwner, Observer { data ->
-            easyAdapter.setItems(
-                ItemList.create().apply {
-                    when {
-                        data.hasData -> addAll(data.data?.list ?: emptyList(), artObjectController)
-                        data.isLoading -> repeat(STUBS_COUNT) { add(true, stubController) }
-                        data.hasError -> add(errorController)
+            when {
+                data.hasData -> renderArtObjects(data?.data ?: PaginationBundle())
+                data.isLoading -> renderLoading()
+                data.hasError -> renderErrorPlaceholder()
+            }
+        }
+        )
+    }
+
+    private fun renderArtObjects(paginationBundle: PaginationBundle<ArtObject>) {
+        val items = paginationBundle.list ?: emptyList<ArtObject>()
+        easyAdapter.setItems(
+            ItemList.create().apply {
+                items.forEachIndexed { index, artObject ->
+                    if (index == 0) {
+                        add(artObject.principalOrFirstMaker, headerController)
                     }
-                },
-                data.data?.state ?: PaginationState.COMPLETE
-            )
-        })
+
+                    val nextTitle = items.getOrNull(index + 1)?.principalOrFirstMaker
+                    val hasNext = nextTitle != null
+                    val nextTitleIsDifferent = artObject.principalOrFirstMaker != nextTitle
+
+                    if (hasNext && nextTitleIsDifferent) {
+                        add(artObject, artObjectController)
+                        add(nextTitle, headerController)
+                    } else {
+                        add(artObject, artObjectController)
+                    }
+                }
+            },
+            paginationBundle.state
+        )
+    }
+
+    private fun renderLoading() {
+        easyAdapter.setItems(
+            ItemList.create().apply {
+                repeat(STUBS_COUNT) { add(true, stubController) }
+            },
+            PaginationState.COMPLETE
+        )
+    }
+
+    private fun renderErrorPlaceholder() {
+        easyAdapter.setItems(
+            ItemList.create().add(errorController),
+            PaginationState.COMPLETE
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     companion object {

@@ -22,7 +22,7 @@ class ErrorPlaceholderController(
         private val binding = ListItemArtObjectErrorPlaceholderBinding.bind(itemView)
 
         init {
-            binding.retryBtn.setOnClickListener { onRetryClickListener() }
+            binding.placeholder.retryBtn.setOnClickListener { onRetryClickListener() }
         }
     }
 }

@@ -19,11 +19,13 @@ import javax.inject.Inject
 interface MasterpieceDetailsViewModel {
 
     val screenState: LiveData<DetailsScreenState>
+
+    fun reloadData()
 }
 
 class MasterpieceDetailsViewModelImpl @Inject constructor(
-    route: MasterpieceDetailsFragmentRoute,
-    locale: Locale,
+    private val locale: Locale,
+    private val route: MasterpieceDetailsFragmentRoute,
     private val schedulersProvider: SchedulersProvider,
     private val collectionInteractor: CollectionInteractor
 ) : MasterpieceDetailsViewModel, ViewModel() {
@@ -41,6 +43,10 @@ class MasterpieceDetailsViewModelImpl @Inject constructor(
 
     override fun onCleared() {
         disposables.clear()
+    }
+
+    override fun reloadData() {
+        loadDetails(route.artObject.objectNumber, locale)
     }
 
     private fun loadDetails(id: String, locale: Locale) {

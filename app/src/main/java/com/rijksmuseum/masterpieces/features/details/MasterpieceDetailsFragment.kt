@@ -14,6 +14,7 @@ import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpieceDetailsBinding
 import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.features.details.di.MasterpieceDetailsScreenConfigurator
+import com.rijksmuseum.masterpieces.features.details.models.DetailsScreenState
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -43,15 +44,20 @@ class MasterpieceDetailsFragment : Fragment() {
     }
 
     private fun initViews() {
-        viewBinding.backIb.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.background_arrow_ic).apply {
-                this?.alpha = (255 * 0.2).roundToInt()
-            }
+        viewBinding.backIb.background = ContextCompat.getDrawable(
+            requireContext(),
+            R.drawable.background_arrow_ic
+        ).apply {
+            this?.alpha = (255 * 0.2).roundToInt()
+        }
     }
 
     private fun initListeners() {
         viewBinding.backIb.setOnClickListener {
             activity?.supportFragmentManager?.popBackStack()
+        }
+        viewBinding.placeholder.retryBtn.setOnClickListener {
+            viewModel.reloadData()
         }
     }
 
@@ -59,42 +65,46 @@ class MasterpieceDetailsFragment : Fragment() {
         viewModel.screenState.observe(
             viewLifecycleOwner,
             Observer { data ->
-                with(viewBinding) {
-                    Glide
-                        .with(requireContext())
-                        .load(data.basics.imageUri)
-                        .placeholder(R.drawable.ic_painting_placeholder)
-                        .into(paintingIv)
-
-                    when {
-                        data.details.data != null -> {
-                            renderArtObjectDetails(data.details.data)
-                        }
-                        data.details.isLoading -> {
-                            //todo: render load state
-                        }
-                        data.details.hasError -> {
-                            //todo: render error state
-                        }
+                renderBasicInfo(data)
+                viewBinding.placeholder.placeholderContainer.isVisible = data.details.hasError
+                viewBinding.datingTv.isVisible = data.details.hasData
+                viewBinding.descriptionTV.isVisible = data.details.hasData
+                when {
+                    data.details.data != null -> renderArtObjectDetails(data.details.data)
+                    data.details.isLoading -> {
+                        //todo: render load state
+                    }
+                    data.details.hasError -> {
+                        //todo: render error state
                     }
                 }
             }
         )
     }
 
-    private fun renderArtObjectDetails(data: ArtObjectDetailed) {
+    private fun renderBasicInfo(data: DetailsScreenState) {
         with(viewBinding) {
-            titleTv.text = data.title
-
+            titleTv.text = data.basics.title
             principalMakerTv.text = resources.getString(
                 R.string.masterpiece_details_author_text,
-                data.principalOrFirstMaker
+                data.basics.principalOrFirstMaker
             )
 
-            datingTv.isVisible = data.dating.isNotEmpty()
-            datingTv.text =
-                resources.getString(R.string.masterpiece_details_dating_text, data.dating)
+            Glide
+                .with(requireContext())
+                .load(data.basics.imageUri)
+                .placeholder(R.drawable.ic_painting_placeholder)
+                .into(paintingIv)
+        }
+    }
 
+    private fun renderArtObjectDetails(data: ArtObjectDetailed) {
+        with(viewBinding) {
+            datingTv.isVisible = data.dating.isNotEmpty()
+            datingTv.text = resources.getString(
+                R.string.masterpiece_details_dating_text,
+                data.dating
+            )
             descriptionTV.text = data.description
         }
     }

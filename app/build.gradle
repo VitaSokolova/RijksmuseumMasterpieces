@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -60,6 +61,7 @@ dependencies {
     implementation view.shimmer
 
     implementation images.glide
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor images.glideAnnotationProcessor
 
     // RecyclerView Adapter

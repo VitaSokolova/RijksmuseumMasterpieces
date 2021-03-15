@@ -17,6 +17,9 @@
         <!-- Customize your theme here. -->
 
         <item name="stubsColor">@color/gray</item>
+
+        <item name="android:windowBackground">@color/gray</item>
+        <item name="android:colorBackground">@color/gray</item>
     </style>
 
     <!-- Стиль шиммера для анимации загрузки -->

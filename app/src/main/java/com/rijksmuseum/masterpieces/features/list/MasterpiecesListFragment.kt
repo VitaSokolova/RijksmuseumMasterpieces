@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,6 +14,8 @@ import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpiecesListBinding
 import com.rijksmuseum.masterpieces.domain.ArtObject
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
+import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragment
+import com.rijksmuseum.masterpieces.features.details.MasterpieceDetailsFragmentRoute
 import com.rijksmuseum.masterpieces.features.list.controllers.*
 import com.rijksmuseum.masterpieces.features.list.di.MasterpiecesListScreenConfigurator
 import ru.surfstudio.android.easyadapter.ItemList
@@ -31,18 +35,12 @@ class MasterpiecesListFragment : Fragment() {
 
     private val easyAdapter = EasyPaginationAdapter(
         PaginationFooterItemController()
-    ) {
-        viewModel.loadNextPage()
-    }
+    ) { viewModel.loadNextPage() }
 
     private val headerController = HeaderItemController()
     private val stubController = StubArtObjectController()
-    private val errorController = ErrorPlaceholderController {
-        viewModel.loadFirstPage()
-    }
-    private val artObjectController = ArtObjectController {
-        //todo: navigate to details screen
-    }
+    private val errorController = ErrorPlaceholderController { viewModel.loadFirstPage() }
+    private val artObjectController = ArtObjectController { openDetailsScreen(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,15 +62,16 @@ class MasterpiecesListFragment : Fragment() {
         }
     }
 
-
     private fun observeViewModel() {
-        viewModel.artObjects.observe(viewLifecycleOwner, Observer { requestUi ->
-            when {
-                requestUi.data != null -> renderArtObjects(requestUi?.data)
-                requestUi.isLoading -> renderLoading()
-                requestUi.hasError -> renderErrorPlaceholder()
+        viewModel.artObjects.observe(
+            viewLifecycleOwner,
+            Observer { requestUi ->
+                when {
+                    requestUi.data != null -> renderArtObjects(requestUi?.data)
+                    requestUi.isLoading -> renderLoading()
+                    requestUi.hasError -> renderErrorPlaceholder()
+                }
             }
-        }
         )
     }
 
@@ -117,22 +116,20 @@ class MasterpiecesListFragment : Fragment() {
         )
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun openDetailsScreen(artObject: ArtObject) {
+        activity?.supportFragmentManager?.commit {
+            replace<MasterpieceDetailsFragment>(
+                R.id.fragment_container,
+                MasterpieceDetailsFragment.NAME,
+                MasterpieceDetailsFragmentRoute(artObject).getBundle()
+
+            )
+            addToBackStack(MasterpieceDetailsFragment.NAME)
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment MasterpiecesListFragment.
-         */
-        @JvmStatic
-        fun newInstance() = MasterpiecesListFragment()
-
         const val NAME = "MasterpiecesListFragment"
-
-        const val STUBS_COUNT = 2
+        private const val STUBS_COUNT = 3
     }
 }

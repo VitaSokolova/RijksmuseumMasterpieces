@@ -1,5 +1,6 @@
 package com.rijksmuseum.masterpieces.features.list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,7 @@ class MasterpiecesListViewModelImpl @Inject constructor(
     private val disposables = CompositeDisposable()
 
     init {
+        Log.v("ListVM", "${hashCode()}")
         loadFirstPage()
     }
 

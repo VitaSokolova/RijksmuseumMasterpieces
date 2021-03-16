@@ -2,6 +2,9 @@ package com.rijksmuseum.masterpieces.services.collection.dto
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * DTO for masterpiece creation dates
+ */
 data class DatingDto(
 	@SerializedName("period")
 	val period: Int? = null,

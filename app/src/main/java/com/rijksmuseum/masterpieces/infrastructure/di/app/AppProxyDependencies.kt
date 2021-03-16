@@ -1,7 +1,8 @@
 package com.rijksmuseum.masterpieces.infrastructure.di.app
 
 import android.content.Context
-import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
+import com.rijksmuseum.masterpieces.infrastructure.logging.Logger
+import com.rijksmuseum.masterpieces.infrastructure.schedulers.SchedulersProvider
 import com.rijksmuseum.masterpieces.services.collection.CollectionInteractor
 
 /**
@@ -12,6 +13,7 @@ interface AppProxyDependencies {
 
     fun context(): Context
     fun schedulersProvider(): SchedulersProvider
+    fun logger(): Logger
 
     // Features Interactors
     fun collectionInteractor(): CollectionInteractor

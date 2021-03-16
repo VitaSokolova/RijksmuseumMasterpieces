@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import java.util.*
 
-
 fun Locale.isDutch(): Boolean {
     return language == Locale("nl").language
 }

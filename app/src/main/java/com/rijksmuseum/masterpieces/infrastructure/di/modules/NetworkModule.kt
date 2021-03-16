@@ -1,4 +1,4 @@
-package com.rijksmuseum.masterpieces.infrastructure.network.di
+package com.rijksmuseum.masterpieces.infrastructure.di.modules
 
 import com.rijksmuseum.masterpieces.infrastructure.network.BASE_URL
 import dagger.Module

@@ -7,6 +7,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * A workaround to debounce LiveData events like we used to do in RxJava
+ */
 fun <T> LiveData<T>.debounce(duration: Long = 1000L, coroutineScope: CoroutineScope) =
     MediatorLiveData<T>().also { mld ->
 
@@ -25,6 +28,5 @@ fun <T> LiveData<T>.debounce(duration: Long = 1000L, coroutineScope: CoroutineSc
                     mld.value = source.value
                 }
             }
-
         }
     }

@@ -1,16 +1,15 @@
 package com.rijksmuseum.masterpieces.features.details
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rijksmuseum.masterpieces.app.App
 import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.features.common.SingleLiveEvent
 import com.rijksmuseum.masterpieces.features.common.models.loading.Loading
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.details.models.DetailsScreenState
-import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
+import com.rijksmuseum.masterpieces.infrastructure.logging.Logger
+import com.rijksmuseum.masterpieces.infrastructure.schedulers.SchedulersProvider
 import com.rijksmuseum.masterpieces.services.collection.CollectionInteractor
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.*
@@ -27,6 +26,7 @@ interface MasterpieceDetailsViewModel {
     // events
     val showErrorMsg: SingleLiveEvent<Unit>
 
+    // actions
     fun reloadData()
 }
 
@@ -34,19 +34,17 @@ class MasterpieceDetailsViewModelImpl @Inject constructor(
     private val locale: Locale,
     private val route: MasterpieceDetailsFragmentRoute,
     private val schedulersProvider: SchedulersProvider,
+    private val logger: Logger,
     private val collectionInteractor: CollectionInteractor
 ) : MasterpieceDetailsViewModel, ViewModel() {
 
-    override val screenState = MutableLiveData(
-        DetailsScreenState(route.artObject, RequestUi())
-    )
+    override val screenState = MutableLiveData(DetailsScreenState(route.artObject, RequestUi()))
 
     override val showErrorMsg: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     private val disposables = CompositeDisposable()
 
     init {
-        Log.v("MasterpieceDetailsVM", "${hashCode()}")
         loadDetails(route.artObject.objectNumber, locale)
     }
 
@@ -88,6 +86,6 @@ class MasterpieceDetailsViewModelImpl @Inject constructor(
             details = RequestUi(error = error)
         )
         showErrorMsg.call()
-        Log.e(App.ERROR_TAG, "${error.message}\n${error.stackTrace}")
+        logger.e("${error.message}\n${error.stackTrace}")
     }
 }

@@ -5,7 +5,7 @@ import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.infrastructure.network.Transformable
 
 /**
- * DTO for masterpieces collection response
+ * DTO for a masterpiece details response
  */
 data class ArtObjectDetailsResponse(
     @SerializedName("artObject")

@@ -1,4 +1,4 @@
-package com.rijksmuseum.masterpieces.services.collection.di
+package com.rijksmuseum.masterpieces.infrastructure.di.modules
 
 import com.rijksmuseum.masterpieces.services.collection.CollectionApi
 import dagger.Module

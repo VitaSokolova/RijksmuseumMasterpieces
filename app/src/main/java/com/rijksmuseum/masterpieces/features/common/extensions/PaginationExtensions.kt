@@ -22,7 +22,7 @@ fun <T> PaginationBundle<T>?.merge(nextPage: DataList<T>): PaginationBundle<T> {
 /**
  * Helper method which applies received error to previous state
  *
- * If it is only a pagination error, we change only PaginationState
+ * If it is a pagination error, we change only PaginationState
  * If an error occurred during the first page loading, we set a global error state
  */
 fun <T> RequestUi<PaginationBundle<T>>.applyError(error: Throwable): RequestUi<PaginationBundle<T>> {
@@ -36,7 +36,7 @@ fun <T> RequestUi<PaginationBundle<T>>.applyError(error: Throwable): RequestUi<P
 /**
  * Helper method which applies loading to previous state
  *
- * If it is only a pagination loading, we don't change anything
+ * If it is a pagination loading, we don't change anything
  * If it is the first page loading, we set a global loading state
  */
 fun <T> RequestUi<PaginationBundle<T>>.applyLoading(): RequestUi<PaginationBundle<T>> {

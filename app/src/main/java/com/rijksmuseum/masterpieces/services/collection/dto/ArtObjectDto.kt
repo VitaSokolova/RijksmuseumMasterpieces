@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.infrastructure.network.Transformable
 
+/**
+ * DTO for an object in the masterpieces list
+ */
 data class ArtObjectDto(
     @SerializedName("objectNumber")
     private val objectNumber: String,

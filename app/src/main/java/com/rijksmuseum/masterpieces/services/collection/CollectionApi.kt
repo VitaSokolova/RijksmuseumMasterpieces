@@ -31,6 +31,9 @@ interface CollectionApi {
         @Query("type") type: String
     ): Single<CollectionResponse>
 
+    /**
+     * Returns detailed information about selected masterpiece
+     */
     @GET(MASTERPIECE_DETAILS_URL)
     fun getMasterpieceDetails(
         @Path("language") language: String,

@@ -1,10 +1,8 @@
 package com.rijksmuseum.masterpieces.features.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rijksmuseum.masterpieces.app.App
 import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.features.common.SingleLiveEvent
 import com.rijksmuseum.masterpieces.features.common.extensions.applyError
@@ -12,7 +10,8 @@ import com.rijksmuseum.masterpieces.features.common.extensions.applyLoading
 import com.rijksmuseum.masterpieces.features.common.extensions.merge
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.common.models.pagination.PaginationBundle
-import com.rijksmuseum.masterpieces.infrastructure.SchedulersProvider
+import com.rijksmuseum.masterpieces.infrastructure.logging.Logger
+import com.rijksmuseum.masterpieces.infrastructure.schedulers.SchedulersProvider
 import com.rijksmuseum.masterpieces.services.collection.CollectionInteractor
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import ru.surfstudio.android.datalistpagecount.domain.datalist.DataList
@@ -39,6 +38,7 @@ interface MasterpiecesListViewModel {
 class MasterpiecesListViewModelImpl @Inject constructor(
     private val locale: Locale,
     private val schedulersProvider: SchedulersProvider,
+    private val logger: Logger,
     private val collectionInteractor: CollectionInteractor
 ) : ViewModel(), MasterpiecesListViewModel {
 
@@ -49,7 +49,6 @@ class MasterpiecesListViewModelImpl @Inject constructor(
     private val disposables = CompositeDisposable()
 
     init {
-        Log.v("ListVM", "${hashCode()}")
         loadFirstPage()
     }
 
@@ -105,7 +104,7 @@ class MasterpiecesListViewModelImpl @Inject constructor(
         val previousPage = artObjects.value ?: RequestUi()
         artObjects.value = previousPage.applyError(error)
         showErrorMsg.call()
-        Log.e(App.ERROR_TAG, "${error.message}\n${error.stackTrace}")
+        logger.e("${error.message}\n${error.stackTrace}")
     }
 
     companion object {

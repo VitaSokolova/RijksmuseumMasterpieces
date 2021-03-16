@@ -1,4 +1,4 @@
-package com.rijksmuseum.masterpieces.infrastructure
+package com.rijksmuseum.masterpieces.infrastructure.schedulers
 
 import io.reactivex.rxjava3.core.Scheduler
 
@@ -9,5 +9,6 @@ import io.reactivex.rxjava3.core.Scheduler
 interface SchedulersProvider {
     
     fun main(): Scheduler
+
     fun worker(): Scheduler
 }

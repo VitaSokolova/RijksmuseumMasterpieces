@@ -32,6 +32,9 @@ class CollectionInteractor @Inject constructor(
         return collectionRepository.getTopMasterpieces(locale, pageNumber, pageSize)
     }
 
+    /**
+     * Returns detailed information about selected masterpiece
+     */
     fun getMasterpieceDetails(id: String, locale: Locale): Single<ArtObjectDetailed> {
         return collectionRepository.getMasterpieceDetails(id, locale)
     }

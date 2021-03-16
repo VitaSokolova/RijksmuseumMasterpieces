@@ -8,6 +8,7 @@ import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.features.list.MasterpiecesListFragment
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -15,6 +16,15 @@ class MainActivity : AppCompatActivity() {
         val fragment = supportFragmentManager.findFragmentByTag(MasterpiecesListFragment.NAME)
         if (fragment == null) {
             openMasterpiecesListFragment()
+        }
+    }
+
+    override fun onBackPressed() {
+        val fragmentCount = supportFragmentManager.backStackEntryCount
+        when {
+            fragmentCount == 1 -> finish()
+            fragmentCount > 1 -> supportFragmentManager.popBackStack()
+            else -> super.onBackPressed()
         }
     }
 

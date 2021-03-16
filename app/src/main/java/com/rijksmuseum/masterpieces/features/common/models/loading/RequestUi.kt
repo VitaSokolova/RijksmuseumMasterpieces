@@ -1,10 +1,10 @@
 package com.rijksmuseum.masterpieces.features.common.models.loading
 
 /**
- * Data to display on the Ui of an asynchronous data retrieval request.
+ * Data to display an asynchronous data retrieval request state on the UI
  *
  * @param data  loaded data
- * @param load  a wrapper over the loading state
+ * @param load  a type of loading state
  * @param error if it occurred during the request
  */
 data class RequestUi<T>(

@@ -33,6 +33,7 @@ class ArtObjectController(val onClickListener: (ArtObjectBasics) -> Unit) :
 
         override fun bind(data: ArtObjectBasics) {
             this.artObject = data
+
             binding.titleTv.text = data.title
 
             data.imageUri?.let {

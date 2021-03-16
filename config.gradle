@@ -53,7 +53,9 @@ ext {
             androidxTestCoreVersion           : '1.2.0',
             androidxTestExtJunitVersion       : '1.1.1',              //http://bit.ly/2zC6UV1
             androidXTestRunnerVersion         : '1.2.0',              //http://bit.ly/2ztEfBo
-            androidXEspressoCoreVersion       : '3.2.0'               //http://bit.ly/2DNc0AA
+            androidXEspressoCoreVersion       : '3.2.0',              //http://bit.ly/2DNc0AA
+            kotestVersion                     : '4.4.3',              //https://bit.ly/3oZl3CB
+            mockkVersion                      : "1.10.6",        //https://bit.ly/3r6t8rc
 
     ]
 
@@ -125,5 +127,6 @@ ext {
             extJunit    : "androidx.test.ext:junit:${versions.androidxTestExtJunitVersion}",
             testRunner  : "androidx.test:runner:${versions.androidXTestRunnerVersion}",
             espressoCore: "androidx.test.espresso:espresso-core:${versions.androidXEspressoCoreVersion}"
+
     ]
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 
 /**
- * Encapsulates working with input parameters on [MasterpieceDetailsFragment]
+ * Class is responsible for working with input parameters of [MasterpieceDetailsFragment]
  */
 class MasterpieceDetailsFragmentRoute(val artObject: ArtObjectBasics) {
 

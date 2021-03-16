@@ -5,6 +5,9 @@ import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.infrastructure.network.Transformable
 
+/**
+ * DTO for a masterpiece details
+ */
 data class ArtObjectDetailedDto(
     @SerializedName("objectNumber")
     private val objectNumber: String,

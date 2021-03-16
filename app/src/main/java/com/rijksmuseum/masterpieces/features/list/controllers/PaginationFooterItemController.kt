@@ -8,8 +8,8 @@ import ru.surfstudio.android.easyadapter.pagination.EasyPaginationAdapter
 import ru.surfstudio.android.easyadapter.pagination.PaginationState
 
 /**
- * Controller with ProgressBar and "Retry" button,
- * occurs in the bottom of list during pagination or after pagination error
+ * Controller with ProgressBar and "Retry" button, which
+ * occurs at the bottom of list during pagination or after pagination error
  */
 class PaginationFooterItemController :
     EasyPaginationAdapter.BasePaginationFooterController<PaginationFooterItemController.Holder>() {

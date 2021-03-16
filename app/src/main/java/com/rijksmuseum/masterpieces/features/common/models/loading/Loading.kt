@@ -15,6 +15,7 @@ enum class Loading {
     PAGING;
 
     fun isMain(): Boolean = this == MAIN
+
     fun isPaging(): Boolean = this == PAGING
 }
 

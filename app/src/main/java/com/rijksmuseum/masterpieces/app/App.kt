@@ -15,4 +15,10 @@ class App: Application() {
             .appModule(AppModule(this))
             .build()
     }
+
+    companion object {
+        // tag for logging errors
+        const val ERROR_TAG = "Rijksmuseum"
+    }
 }
+

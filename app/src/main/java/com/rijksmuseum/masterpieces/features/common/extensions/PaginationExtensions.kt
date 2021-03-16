@@ -1,4 +1,4 @@
-package com.rijksmuseum.masterpieces.utils
+package com.rijksmuseum.masterpieces.features.common.extensions
 
 import com.rijksmuseum.masterpieces.features.common.models.loading.Loading
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi

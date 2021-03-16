@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rijksmuseum.masterpieces.app.App
+import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
+import com.rijksmuseum.masterpieces.features.common.SingleLiveEvent
 import com.rijksmuseum.masterpieces.features.common.models.loading.Loading
 import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.details.models.DetailsScreenState
@@ -18,7 +21,11 @@ import javax.inject.Inject
  */
 interface MasterpieceDetailsViewModel {
 
+    // state
     val screenState: LiveData<DetailsScreenState>
+
+    // events
+    val showErrorMsg: SingleLiveEvent<Unit>
 
     fun reloadData()
 }
@@ -33,6 +40,8 @@ class MasterpieceDetailsViewModelImpl @Inject constructor(
     override val screenState = MutableLiveData(
         DetailsScreenState(route.artObject, RequestUi())
     )
+
+    override val showErrorMsg: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     private val disposables = CompositeDisposable()
 
@@ -54,23 +63,31 @@ class MasterpieceDetailsViewModelImpl @Inject constructor(
             collectionInteractor.getMasterpieceDetails(id, locale)
                 .subscribeOn(schedulersProvider.worker())
                 .observeOn(schedulersProvider.main())
-                .doOnSubscribe {
-                    screenState.value = screenState.value?.copy(
-                        details = RequestUi(load = Loading.MAIN)
-                    )
-                }
+                .doOnSubscribe { onLoadingStarted() }
                 .subscribe(
-                    { data ->
-                        screenState.value = screenState.value?.copy(
-                            details = RequestUi(data)
-                        )
-                    },
-                    { error ->
-                        screenState.value = screenState.value?.copy(
-                            details = RequestUi(error = error)
-                        )
-                    }
+                    ::onSuccess,
+                    ::onError
                 )
         )
+    }
+
+    private fun onLoadingStarted() {
+        screenState.value = screenState.value?.copy(
+            details = RequestUi(load = Loading.MAIN)
+        )
+    }
+
+    private fun onSuccess(data: ArtObjectDetailed) {
+        screenState.value = screenState.value?.copy(
+            details = RequestUi(data)
+        )
+    }
+
+    private fun onError(error: Throwable) {
+        screenState.value = screenState.value?.copy(
+            details = RequestUi(error = error)
+        )
+        showErrorMsg.call()
+        Log.e(App.ERROR_TAG, "${error.message}\n${error.stackTrace}")
     }
 }

@@ -13,7 +13,7 @@ data class ArtObjectDetailedDto(
     @SerializedName("principalOrFirstMaker")
     private val principalOrFirstMaker: String,
     @SerializedName("webImage")
-    private val image: ImageDto,
+    private val image: ImageDto?,
     @SerializedName("dating")
     private val dating: DatingDto? = null,
     @SerializedName("description")
@@ -25,7 +25,7 @@ data class ArtObjectDetailedDto(
             objectNumber,
             title,
             principalOrFirstMaker,
-            image.url,
+            image?.url,
             dating?.presentingDate ?: "",
             description
         )

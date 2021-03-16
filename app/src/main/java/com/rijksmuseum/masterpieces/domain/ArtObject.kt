@@ -15,7 +15,7 @@ interface ArtObject {
     val objectNumber: String
     val title: String
     val principalOrFirstMaker: String
-    val imageUri: String
+    val imageUri: String?
 }
 
 /**
@@ -26,7 +26,7 @@ data class ArtObjectBasics(
     override val objectNumber: String,
     override val title: String,
     override val principalOrFirstMaker: String,
-    override val imageUri: String
+    override val imageUri: String?
 ) : ArtObject, Parcelable
 
 /**
@@ -36,7 +36,7 @@ data class ArtObjectDetailed(
     override val objectNumber: String,
     override val title: String,
     override val principalOrFirstMaker: String,
-    override val imageUri: String,
+    override val imageUri: String?,
     val dating: String,
     val description: String
 ) : ArtObject

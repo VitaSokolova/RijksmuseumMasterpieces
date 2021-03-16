@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.Observer
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -76,15 +75,16 @@ class MasterpiecesListFragment : Fragment() {
                 viewLifecycleOwner,
                 Observer { requestUi ->
                     when {
-                        requestUi.data != null -> renderArtObjects(requestUi?.data)
+                        requestUi.data != null -> renderArtObjects(requestUi.data)
                         requestUi.isLoading -> renderLoading()
-                        requestUi.hasError -> {
-                            renderErrorPlaceholder()
-                            showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text))
-                        }
+                        requestUi.hasError -> renderErrorPlaceholder()
                     }
                 }
             )
+
+        viewModel.showErrorMsg.observe(
+            viewLifecycleOwner,
+            Observer { showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text)) })
     }
 
     private fun renderArtObjects(paginationBundle: PaginationBundle<ArtObjectBasics>) {

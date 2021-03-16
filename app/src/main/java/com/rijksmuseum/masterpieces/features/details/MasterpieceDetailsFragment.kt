@@ -14,10 +14,11 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.rijksmuseum.masterpieces.R
 import com.rijksmuseum.masterpieces.databinding.FragmentMasterpieceDetailsBinding
+import com.rijksmuseum.masterpieces.domain.ArtObjectBasics
 import com.rijksmuseum.masterpieces.domain.ArtObjectDetailed
 import com.rijksmuseum.masterpieces.features.common.debounce
+import com.rijksmuseum.masterpieces.features.common.models.loading.RequestUi
 import com.rijksmuseum.masterpieces.features.details.di.MasterpieceDetailsScreenConfigurator
-import com.rijksmuseum.masterpieces.features.details.models.DetailsScreenState
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -56,12 +57,8 @@ class MasterpieceDetailsFragment : Fragment() {
     }
 
     private fun initListeners() {
-        viewBinding.backIb.setOnClickListener {
-            activity?.supportFragmentManager?.popBackStack()
-        }
-        viewBinding.placeholder.retryBtn.setOnClickListener {
-            viewModel.reloadData()
-        }
+        viewBinding.backIb.setOnClickListener { closeScreen() }
+        viewBinding.placeholder.retryBtn.setOnClickListener { viewModel.reloadData() }
     }
 
     private fun observeViewModel() {
@@ -72,35 +69,43 @@ class MasterpieceDetailsFragment : Fragment() {
             ) // to avoid loader and placeholder blinking
             .observe(
                 viewLifecycleOwner,
-                Observer { data ->
-                    with(viewBinding) {
-                        loader.isVisible = data.details.isLoading
-                        placeholder.placeholderContainer.isVisible = data.details.hasError
-                        datingTv.isVisible = data.details.hasData
-                        descriptionTV.isVisible = data.details.hasData
-                        renderBasicInfo(data)
-                        when {
-                            data.details.hasError -> showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text))
-                            data.details.data != null -> renderArtObjectDetails(data.details.data)
-                        }
-                    }
+                Observer { state ->
+                    renderBasicInfo(state.basics)
+                    renderDetailsRequest(state.details)
                 }
             )
+
+        viewModel.showErrorMsg.observe(
+            viewLifecycleOwner,
+            Observer { showSnack(resources.getString(R.string.masterpieces_list_error_placeholder_text)) })
     }
 
-    private fun renderBasicInfo(data: DetailsScreenState) {
+    private fun renderBasicInfo(data: ArtObjectBasics) {
         with(viewBinding) {
-            titleTv.text = data.basics.title
+            titleTv.text = data.title
+
             principalMakerTv.text = resources.getString(
                 R.string.masterpiece_details_author_text,
-                data.basics.principalOrFirstMaker
+                data.principalOrFirstMaker
             )
 
-            Glide
-                .with(requireContext())
-                .load(data.basics.imageUri)
-                .placeholder(R.drawable.ic_painting_placeholder)
-                .into(paintingIv)
+            data.imageUri?.let {
+                Glide
+                    .with(requireContext())
+                    .load(data.imageUri)
+                    .placeholder(R.drawable.ic_painting_placeholder)
+                    .into(paintingIv)
+            }
+        }
+    }
+
+    private fun renderDetailsRequest(request: RequestUi<ArtObjectDetailed>) {
+        with(viewBinding) {
+            loader.isVisible = request.isLoading
+            placeholder.placeholderContainer.isVisible = request.hasError
+            datingTv.isVisible = request.hasData
+            descriptionTV.isVisible = request.hasData
+            request.data?.let { renderArtObjectDetails(it) }
         }
     }
 
@@ -117,6 +122,10 @@ class MasterpieceDetailsFragment : Fragment() {
 
     private fun showSnack(text: String) {
         Snackbar.make(viewBinding.root, text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun closeScreen() {
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     companion object {

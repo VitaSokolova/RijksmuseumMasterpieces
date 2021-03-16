@@ -35,12 +35,14 @@ class ArtObjectController(val onClickListener: (ArtObjectBasics) -> Unit) :
             this.artObject = data
             binding.titleTv.text = data.title
 
-            Glide
-                .with(itemView.context)
-                .load(data.imageUri)
-                .centerCrop()
-                .placeholder(R.drawable.ic_painting_placeholder)
-                .into(binding.imageIv)
+            data.imageUri?.let {
+                Glide
+                    .with(itemView.context)
+                    .load(data.imageUri)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_painting_placeholder)
+                    .into(binding.imageIv)
+            }
         }
     }
 }

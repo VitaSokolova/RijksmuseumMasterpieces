@@ -29,7 +29,7 @@
             android:id="@+id/imageIv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_height"
-            tools:background="@color/gray"
+            tools:background="?stubsColor"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 

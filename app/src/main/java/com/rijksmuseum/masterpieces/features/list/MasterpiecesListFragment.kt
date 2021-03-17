@@ -9,7 +9,6 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.rijksmuseum.masterpieces.R
@@ -27,7 +26,7 @@ import ru.surfstudio.android.easyadapter.pagination.PaginationState
 import javax.inject.Inject
 
 /**
- * Fragment, which shows the list of masterpieces
+ * Fragment which shows the list of masterpieces
  */
 class MasterpiecesListFragment : Fragment() {
 
@@ -59,10 +58,7 @@ class MasterpiecesListFragment : Fragment() {
     }
 
     private fun initViews() {
-        with(viewBinding) {
-            recycler.layoutManager = LinearLayoutManager(context)
-            recycler.adapter = easyAdapter
-        }
+        viewBinding.recycler.adapter = easyAdapter
     }
 
     private fun observeViewModel() {
@@ -128,20 +124,19 @@ class MasterpiecesListFragment : Fragment() {
         )
     }
 
+    private fun showSnack(text: String) {
+        Snackbar.make(viewBinding.root, text, Snackbar.LENGTH_SHORT).show()
+    }
+
     private fun openDetailsScreen(artObject: ArtObjectBasics) {
         activity?.supportFragmentManager?.commit {
             replace<MasterpieceDetailsFragment>(
                 R.id.fragment_container,
                 MasterpieceDetailsFragment.NAME,
                 MasterpieceDetailsFragmentRoute(artObject).getBundle()
-
             )
             addToBackStack(MasterpieceDetailsFragment.NAME)
         }
-    }
-
-    private fun showSnack(text: String) {
-        Snackbar.make(viewBinding.root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {

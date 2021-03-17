@@ -10,7 +10,7 @@ fun <R, T : Transformable<R>> List<T>?.transformCollection(): List<R> {
 }
 
 /**
- * Transforms collection into [DataList] using [PaginationMetadata]
+ * Transforms collection into [DataList] using paging request parameters
  * @return [DataList]
  */
 fun <T> Collection<T>.toDataList(

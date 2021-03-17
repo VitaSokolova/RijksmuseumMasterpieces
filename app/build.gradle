@@ -59,16 +59,15 @@ dependencies {
 
     implementation androidX.coreKtx
     implementation androidX.appcompat
-    implementation androidX.constraintLayout
     implementation view.material
-    implementation view.fragment
-    implementation view.fragmentKtx
-    implementation view.activity
+    implementation androidX.fragment
+    implementation androidX.fragmentKtx
+    implementation androidX.activityKtx
     implementation view.viewBindingPropertyDelegate
     implementation view.shimmer
 
+    // Glide
     implementation images.glide
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor images.glideAnnotationProcessor
 
     // RecyclerView Adapter
@@ -82,8 +81,6 @@ dependencies {
     implementation architectureComponents.viewModelKtx
     implementation architectureComponents.liveDataKtx
     implementation architectureComponents.viewModelSavedState
-    implementation architectureComponents.lifecycle
-    implementation architectureComponents.lifecycleAnnotationProcessor
 
     // DI
     implementation di.dagger
@@ -100,9 +97,6 @@ dependencies {
 
     // Tests
     testImplementation test.junit
-    androidTestImplementation androidTest.extJunit
-    androidTestImplementation androidTest.espressoCore
-
     testImplementation test.kotest
     testImplementation test.mockk
 }

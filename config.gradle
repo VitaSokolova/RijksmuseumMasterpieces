@@ -25,16 +25,14 @@ ext {
 
             androidXVersion                   : '1.1.0',              //http://bit.ly/2zjueqh
             androidxAnnotationVersion         : '1.1.0',              //http://bit.ly/2P3QBVO
-            constraintLayoutVersion           : '2.0.4',              //http://bit.ly/2S1WoNg
 
             lifecycleVersion                  : '2.3.0',              //https://bit.ly/36Z0Re9
             viewBindingPropertyDelegateVersion: '1.4.4',              // https://github.com/kirich1409/ViewBindingPropertyDelegate
 
-            easyAdapterVersion                : '2.0.0',
-            materialProgressBarVersion        : '1.6.1',
-            materialVersion                   : '1.2.1',              //https://clck.ru/FXH4L
-            fragmentVersion                   : '1.3.1',
-            activityVersion                   : '1.2.1',
+            easyAdapterVersion                : '2.0.0',              // https://github.com/surfstudio/EasyAdapter
+            materialVersion                   : '1.2.1',              // https://clck.ru/FXH4L
+            fragmentVersion                   : '1.3.1',              // https://mvnrepository.com/artifact/androidx.fragment/fragment
+            activityKtxVersion                : '1.2.1',              // https://mvnrepository.com/artifact/androidx.activity/activity-ktx
             shimmerVersion                    : '0.4.0',              // https://facebook.github.io/shimmer-android/
 
             glideVersion                      : '4.12.0',             // https://github.com/bumptech/glide
@@ -49,13 +47,6 @@ ext {
             junitVersion                      : '4.13',
             kotestVersion                     : '4.3.2',              //https://bit.ly/3oZl3CB
             mockkVersion                      : "1.10.3-jdk8",        //https://bit.ly/3r6t8rc
-
-            androidxTestCoreVersion           : '1.2.0',
-            androidxTestExtJunitVersion       : '1.1.1',              //http://bit.ly/2zC6UV1
-            androidXTestRunnerVersion         : '1.2.0',              //http://bit.ly/2ztEfBo
-            androidXEspressoCoreVersion       : '3.2.0',              //http://bit.ly/2DNc0AA
-            kotestVersion                     : '4.4.3',              //https://bit.ly/3oZl3CB
-            mockkVersion                      : "1.10.6",        //https://bit.ly/3r6t8rc
 
     ]
 
@@ -72,29 +63,25 @@ ext {
     ]
 
     androidX = [
-            coreKtx         : "androidx.core:core-ktx:${versions.androidXVersion}",
-            appcompat       : "androidx.appcompat:appcompat:${versions.androidXVersion}",
-            annotation      : "androidx.annotation:annotation:${versions.androidxAnnotationVersion}",
-            constraintLayout: "androidx.constraintlayout:constraintlayout:${versions.constraintLayoutVersion}",
+            coreKtx    : "androidx.core:core-ktx:${versions.androidXVersion}",
+            appcompat  : "androidx.appcompat:appcompat:${versions.androidXVersion}",
+            annotation : "androidx.annotation:annotation:${versions.androidxAnnotationVersion}",
+            fragment   : "androidx.fragment:fragment:${versions.fragmentVersion}",
+            fragmentKtx: "androidx.fragment:fragment-ktx:${versions.fragmentVersion}",
+            activityKtx: "androidx.activity:activity-ktx:${versions.activityKtxVersion}",
     ]
 
     architectureComponents = [
-            viewModelKtx                : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycleVersion}",
-            liveDataKtx                 : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycleVersion}",
-            viewModelSavedState         : "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions.lifecycleVersion}",
-            lifecycle                   : "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycleVersion}",
-            lifecycleAnnotationProcessor: "androidx.lifecycle:lifecycle-common-java8:${versions.lifecycleVersion}"
+            viewModelKtx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycleVersion}",
+            liveDataKtx        : "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycleVersion}",
+            viewModelSavedState: "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions.lifecycleVersion}"
     ]
 
     view = [
             viewBindingPropertyDelegate: "com.github.kirich1409:viewbindingpropertydelegate-noreflection:${versions.viewBindingPropertyDelegateVersion}",
             easyAdapter                : "ru.surfstudio.android:easyadapter:${versions.easyAdapterVersion}",
             easyAdapterPaging          : "ru.surfstudio.android:easyadapter-pagination:${versions.easyAdapterVersion}",
-            materialProgressBar        : "me.zhanghai.android.materialprogressbar:library:${versions.materialProgressBarVersion}",
             material                   : "com.google.android.material:material:${versions.materialVersion}",
-            fragment                   : "androidx.fragment:fragment:${versions.fragmentVersion}",
-            fragmentKtx                : "androidx.fragment:fragment-ktx:${versions.fragmentVersion}",
-            activity                   : "androidx.activity:activity-ktx:${versions.activityVersion}",
             shimmer                    : "com.facebook.shimmer:shimmer:${versions.shimmerVersion}"
     ]
 
@@ -120,13 +107,5 @@ ext {
             junit : "junit:junit:${versions.junitVersion}",
             kotest: "io.kotest:kotest-runner-junit5:${versions.kotestVersion}",
             mockk : "io.mockk:mockk:${versions.mockkVersion}"
-    ]
-
-    androidTest = [
-            core        : "androidx.test:core:${versions.androidxTestCoreVersion}",
-            extJunit    : "androidx.test.ext:junit:${versions.androidxTestExtJunitVersion}",
-            testRunner  : "androidx.test:runner:${versions.androidXTestRunnerVersion}",
-            espressoCore: "androidx.test.espresso:espresso-core:${versions.androidXEspressoCoreVersion}"
-
     ]
 }

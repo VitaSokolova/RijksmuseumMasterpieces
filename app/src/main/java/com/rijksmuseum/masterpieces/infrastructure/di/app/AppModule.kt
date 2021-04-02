@@ -6,6 +6,7 @@ import com.rijksmuseum.masterpieces.infrastructure.logging.Logger
 import com.rijksmuseum.masterpieces.infrastructure.logging.LoggerImpl
 import com.rijksmuseum.masterpieces.infrastructure.schedulers.SchedulersProvider
 import com.rijksmuseum.masterpieces.infrastructure.schedulers.SchedulersProviderImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -22,14 +23,17 @@ class AppModule(
     @Provides
     @Singleton
     internal fun provideApp(): Application = app
+}
 
-    @Provides
-    @Singleton
-    internal fun schedulersProvider(): SchedulersProvider =
-        SchedulersProviderImpl()
+@Module
+interface SchedulersModule {
 
-    @Provides
+    @Binds
     @Singleton
-    internal fun Logger(): Logger =
-        LoggerImpl()
+    fun schedulersProvider(schedulersProvider: SchedulersProviderImpl): SchedulersProvider
+
+    @Binds
+    @Singleton
+    fun Logger(logger: LoggerImpl): Logger
+
 }

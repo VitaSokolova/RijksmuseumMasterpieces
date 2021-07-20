@@ -2,7 +2,7 @@
 
 It is a simple app showing the list of masterpieces, which are exhibited in Rijksmuseum sorted by author or principal. The first screen shows a paginable list of paintings, the second - detailed information about the selected painting.  
 
-Depending on the locale, the information from the server is downloaded in Dutch or English (of cause if the server returns correctly localized texts). The change of the device's locale while the app is running is not handled, because no such requirement was made. But this improvement is easy to do.
+Depending on the locale, the information from the server is downloaded in Dutch or English (of course if the server returns correctly localized texts). The change of the device's locale while the app is running is not handled, because no such requirement was made. But this improvement is easy to do.
 
 ## Technologies
 
